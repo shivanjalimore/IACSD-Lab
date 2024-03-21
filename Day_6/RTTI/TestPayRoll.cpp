@@ -122,7 +122,7 @@ int main()
     iacsd[2] = &sp;
     iacsd[3] = &mgr1;
 
-    Manager* mObj=dynamic_cast<Manager*>(ptr);//DownCasting  Parent---casted-->Manager
+    Manager* mObj=dynamic_cast<Manager*>(Employee);//DownCasting  Parent---casted-->Manager
    mObj->ManagerTask();
 
     return 0;
