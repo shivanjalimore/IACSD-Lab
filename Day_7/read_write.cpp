@@ -24,7 +24,7 @@ public:
     }
     void write()
     {
-        ofstream fout("file.txt", ios::app);
+        ofstream fout("file.txt", ios::out | ios::app);
         if (fout.is_open())
         {
             cout << "Enter id : " << endl;
@@ -32,40 +32,14 @@ public:
             cout << "Enter name : " << endl;
             cin >> name;
             fout << "Your Entered data : " << endl;
-            fout << "ID: " << id << " Name : " << name << endl;
+            fout << id << " " << name << endl;
             fout.close();
         }
         else
         {
-            cout<<" File is not opening "<<endl;
+            cout << " File is not opening " << endl;
         }
     }
-
-    // void read()
-    // {
-    //     ifstream fin("file.txt",ios::in | ios::binary);
-    //     string s;
-    //     if (fin.is_open())
-    //     {
-    //         // while (getline(fin, s))  //read each line from the file
-    //         // {
-    //         //     cout <<" "<<s<< endl;
-    //         // }
-    //         fin >> id >> name >> department;
-    //         cout<<" id : "<<id<<" Name : "<<name<<" department : "<<department<<endl;
-    //     //     // Add 5 to the id
-    //     //     id += 5;
-    //     //     // Display modified data
-    //     //    cout << "Modified Data:" << endl;
-    //     // display();
-    //         fin.close();
-    //     }
-    //     else
-    //     {
-    //         cout << "--- Error in reading ---" << endl;
-    //     }
-    // }
-
 };
 class Derived : public Base
 {
@@ -86,7 +60,7 @@ public:
     void write()
     {
         Base::write();
-        ofstream fout("file.txt", ios::app);
+        ofstream fout("file.txt", ios::out | ios::app);
         if (fout.is_open())
         {
             cout << "Enter department : " << endl;
@@ -96,28 +70,21 @@ public:
             fout << "Department : " << department << endl;
             fout.close();
         }
-          else
+        else
         {
-            cout<<" File is not opening "<<endl;
+            cout << " File is not opening " << endl;
         }
     }
     void read()
     {
-        ifstream fin("file.txt",ios::in | ios::binary);
+        ifstream fin("file.txt");
         string s;
         if (fin.is_open())
         {
-            // while (getline(fin, s))  //read each line from the file
-            // {
-            //     cout <<" "<<s<< endl;
-            // }
-            fin >> id >> name >> department;
-            cout<<" id : "<<id<<" Name : "<<name<<" department : "<<department<<endl;
-        //     // Add 5 to the id
-        //     id += 5;
-        //     // Display modified data
-        //    cout << "Modified Data:" << endl;
-        // display();
+            while (getline(fin, s)) // read each line from the file
+            {
+                cout << " " << s << endl;
+            }
             fin.close();
         }
         else
@@ -125,19 +92,68 @@ public:
             cout << "--- Error in reading ---" << endl;
         }
     }
+
+    void modify(int modifyid)
+    {
+        ifstream fin("file.txt");
+        ofstream fout("temp.txt");
+        int tempId;
+        string tempName, tempDepartment;
+        bool found = false;
+        if (fin.is_open() && fout.is_open())
+        {
+            // Reset file cursor to the beginning of the file
+            fin.seekg(0);
+
+            while (fin >> tempId >> tempName >> tempDepartment)
+            {
+                if (tempId == modifyid)
+                {
+                    found = true;
+                    cout << "Enter new name: ";
+                    cin >> tempName;
+                    cout << "Enter new department: ";
+                    cin >> tempDepartment;
+                    fout << modifyid << " " << tempName << " " << tempDepartment << endl;
+                    cout << "Record modified successfully!" << endl;
+                }
+                else
+                {
+                    fout << tempId << " " << tempName << " " << tempDepartment << endl;
+                }
+            }
+            fin.close();
+            fout.close();
+
+            if (!found)
+            {
+                cout << "Employee with ID " << modifyid << " not found." << endl;
+                remove("temp.txt");
+            }
+            else
+            {
+                remove("file.txt");
+                rename("temp.txt", "file.txt");
+            }
+        }
+        else
+        {
+            cout << "Error in opening file." << endl;
+        }
+    }
 };
 int main()
 {
     Base bobj;
     Derived dobj;
-    //  input obj;
     int choice;
     do
     {
         cout << "\n\nChoose an option:" << endl;
         cout << "1. Fill data" << endl;
         cout << "2. Read data" << endl;
-        cout << "3. Exit" << endl;
+        cout << "3. Modify data" << endl;
+        cout << "4. Exit" << endl;
         cout << "Enter your choice: ";
         cin >> choice;
         switch (choice)
@@ -149,11 +165,14 @@ int main()
             dobj.read();
             break;
         case 3:
-            cout << "Exit" << endl;
+            int modifyid;
+            cout << "Enter employee id to modify data : " << endl;
+            cin >> modifyid;
+            dobj.modify(modifyid);
             break;
         default:
             cout << "Invalid choice. Please try again." << endl;
         }
-    } while (choice != 3);
+    } while (choice != 4);
     return 0;
 }
