@@ -24,14 +24,8 @@ namespace Bank{
 			throw  new  BankException("Low Balance ");
 			this->balance=this->balance-amount;
 			cout<<"After Withdraw Balance="<<balance<<endl;
-		}
-		
-		
-		
-		
+		}	
 	};
-
- 
 }
 
 int main(){
