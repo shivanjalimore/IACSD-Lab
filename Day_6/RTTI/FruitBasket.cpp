@@ -116,6 +116,17 @@ int main()
 				m = new Mango(name, color, weight);
 				shop[index] = m; // upcasting
 				index++;		 // 1
+
+
+// Adding Fruits:
+
+// If the user chooses to add a fruit (options 1, 2, or 3),
+//  it prompts the user to enter the name, color, and weight of the fruit.
+// If the basket is not full (less than 5 fruits), 
+// it dynamically allocates memory for a new fruit object 
+// of the chosen type (mango, apple, or orange) and adds it to the shop array.
+//  It increments the index variable to keep track of the number of fruits in the basket.
+
 				cout << " MAngo Is Added " << endl;
 			}
 			else
