@@ -1,7 +1,7 @@
 #include<iostream>
 using namespace std;
 
-template <class T > 
+template <typename T > 
 T max(T &a, T &b)
 {
    return (a>b)?a:b;
